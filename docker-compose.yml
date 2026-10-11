@@ -1,5 +1,7 @@
 services:
   db:
+    env_file:
+      - backend/.env
     image: postgres:17-alpine
     environment:
       POSTGRES_DB: notable
@@ -7,6 +9,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASS}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d notable"]
       interval: 5s
@@ -17,16 +20,7 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    environment:
-      DATABASE_URL: postgresql+psycopg2://postgres:postgres@db:5432/notable
-      FASTAPI_ENV: development
-      JWT_SECRET: ${JWT_SECRET}
-      JWT_ALGORITHM: HS256
-      JWT_ACCESS_TTL_MINUTES: 60
-      OAUTH_GOOGLE_CLIENT_ID: ${OAUTH_GOOGLE_CLIENT_ID}
-      OAUTH_GOOGLE_CLIENT_SECRET: ${OAUTH_GOOGLE_CLIENT_SECRET}
-      OAUTH_GITHUB_CLIENT_ID: ${OAUTH_GITHUB_CLIENT_ID}
-      OAUTH_GITHUB_CLIENT_SECRET: ${OAUTH_GITHUB_CLIENT_SECRET}
+    env_file: backend/.env
     depends_on:
       db:
         condition: service_healthy
@@ -37,13 +31,14 @@ services:
       - "8000:8000"
 
   frontend:
+    env_file: frontend/.env
     build:
       context: .
       dockerfile: frontend/Dockerfile
     depends_on:
       - backend
     ports:
-      - "5173:80"
+      - "8080:80"
 
 volumes:
   postgres_data:
