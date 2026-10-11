@@ -43,8 +43,8 @@ class DevelopmentConfig(BaseConfig):
 class StagingConfig(BaseConfig):
     DEBUG = False
     SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
-    CORS_ORIGINS = ["https://staging.myapp.com"]
-    CSP = "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' https://staging.myapp.com"
+    CORS_ORIGINS = ["https://notable-fytr.onrender.com"]
+    CSP = "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' https://notable-fytr.onrender.com/"
 
 class ProductionConfig(BaseConfig):
     DEBUG = False
