@@ -1,5 +1,5 @@
 .venv
-.env
+.env*
 *.pyc
 
 # backend
@@ -19,6 +19,9 @@ frontend/src/components/ResponsiveWorkspace.jsx
 
 # testing
 coverage
+
+# docker
+init.sql
 
 # production
 /build
