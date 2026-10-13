@@ -30,8 +30,8 @@ export default function Login() {
 
   const handleOAuth = (provider) => {
     // Redirect to FastAPI OAuth endpoint
-    window.location.href = (import.meta.env.VITE_API_URL || `${window.location.protocol}//${window.location.hostname}:8000`) + provider;
-  };
+    window.location.href = new URL(provider, import.meta.env.API_URL || 'http://localhost:8000').href
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
