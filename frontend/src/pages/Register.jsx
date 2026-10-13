@@ -93,6 +93,9 @@ const Register = () => {
                 </div>
 
                 <div className="my-5 rounded-lg border border-gray-200 bg-gray-50 p-3">
+                    <p className="text-xs leading-5 text-gray-900">
+                        You must check this before registering
+                    </p>
                     <label htmlFor="legal-acceptance" className="flex cursor-pointer items-start gap-3 text-sm leading-5 text-gray-700">
                         <input
                             id="legal-acceptance"
@@ -115,9 +118,6 @@ const Register = () => {
                             </Link>.
                         </span>
                     </label>
-                    <p className="ml-7 mt-2 text-xs leading-5 text-gray-500">
-                        You must check this before registering with email, Google, or GitHub.
-                    </p>
                 </div>
 
                 {/* OAuth Options */}
@@ -167,7 +167,7 @@ const Register = () => {
                 {/* Form 8*/}
                 <form onSubmit={handleRegister} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1">
-                        <label className="text-xs font-medium text-gray-600">Email</label>
+                        <label className="text-xs font-medium text-gray-800">Email</label>
                         <input
                             type="email"
                             name="email"
@@ -179,7 +179,7 @@ const Register = () => {
                         />
                     </div>
                     <div className="flex flex-col gap-1">
-                        <label className="text-xs font-medium text-gray-600">Username</label>
+                        <label className="text-xs font-medium text-gray-800">Username</label>
                         <input
                             type="username"
                             name="username"
@@ -191,7 +191,7 @@ const Register = () => {
                         />
                     </div>
                     <div className="flex flex-col gap-1">
-                        <label className="text-xs font-medium text-gray-600">Password</label>
+                        <label className="text-xs font-medium text-gray-800">Password</label>
                         <input
                             type="password"
                             name="password"
@@ -203,7 +203,7 @@ const Register = () => {
                         />
                     </div>
                     <div className="flex flex-col gap-1">
-                        <label className="text-xs font-medium text-gray-600">Confirm Password</label>
+                        <label className="text-xs font-medium text-gray-800">Confirm Password</label>
                         <input
                             type="password"
                             name="confirmPassword"
