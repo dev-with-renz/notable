@@ -5,6 +5,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import NotFound from './pages/NotFound'
+import PrivacyAndTerms from './pages/PrivacyAndTerms'
 import './App.css'
 
 
@@ -28,11 +29,13 @@ function App() {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/privacy-and-terms" element={<PrivacyAndTerms />} />
         <Route path="/dashboard" element={
           <ProtectedRoute>
             <Dashboard />
           </ProtectedRoute>
         } />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

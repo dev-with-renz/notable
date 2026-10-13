@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { authApi } from "../api/api";
 
 
@@ -12,6 +12,7 @@ const Register = () => {
     })
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [legalAccepted, setLegalAccepted] = useState(false)
     const navigate = useNavigate()
 
     const handleClose = () => {
@@ -26,6 +27,11 @@ const Register = () => {
     const handleRegister = async (e) => {
         e.preventDefault()
         setError(null)
+
+        if (!legalAccepted) {
+            setError("Please review and accept the Privacy Notice and Terms of Service")
+            return
+        }
 
         // Validation
         if (formData.password != formData.confirmPassword) {
@@ -53,7 +59,11 @@ const Register = () => {
     }
 
     const handleOAuth = (provider) => {
-        window.location.href = new URL(provider, import.meta.env.VITE_API_URL || 'http://localhost:8000').href
+        if (!legalAccepted) {
+            setError("Please review and accept the Privacy Notice and Terms of Service")
+            return
+        }
+        window.location.href = new URL(provider, import.meta.env.API_URL || 'http://localhost:8000').href
     }
 
     return (
@@ -82,11 +92,41 @@ const Register = () => {
                     <p className="text-gray-500 text-sm mt-1">Start taking smarter notes</p>
                 </div>
 
+                <div className="my-5 rounded-lg border border-gray-200 bg-gray-50 p-3">
+                    <label htmlFor="legal-acceptance" className="flex cursor-pointer items-start gap-3 text-sm leading-5 text-gray-700">
+                        <input
+                            id="legal-acceptance"
+                            type="checkbox"
+                            checked={legalAccepted}
+                            onChange={(event) => {
+                                setLegalAccepted(event.target.checked)
+                                setError(null)
+                            }}
+                            className="mt-1 h-4 w-4 shrink-0 accent-teal-800"
+                        />
+                        <span>
+                            I agree to the{" "}
+                            <Link to="/privacy-and-terms#terms" className="font-medium text-teal-800 underline underline-offset-2" onClick={(event) => event.stopPropagation()}>
+                                Terms of Service
+                            </Link>
+                            {" "}and acknowledge the{" "}
+                            <Link to="/privacy-and-terms#privacy" className="font-medium text-teal-800 underline underline-offset-2" onClick={(event) => event.stopPropagation()}>
+                                Privacy Notice
+                            </Link>.
+                        </span>
+                    </label>
+                    <p className="ml-7 mt-2 text-xs leading-5 text-gray-500">
+                        You must check this before registering with email, Google, or GitHub.
+                    </p>
+                </div>
+
                 {/* OAuth Options */}
                 <div className="flex flex-col gap-3 mb-6">
                     <button
+                        type="button"
                         onClick={() => handleOAuth("/oauth/google")}
-                        className="flex items-center justify-center gap-3 w-full border border-gray-200 rounded-lg py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                        disabled={!legalAccepted || loading}
+                        className="flex items-center justify-center gap-3 w-full border border-gray-200 rounded-lg py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         <svg className="w-5 h-5" viewBox="0 0 24 24">
                             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -97,8 +137,10 @@ const Register = () => {
                         Continue with Google
                     </button>
                     <button
+                        type="button"
                         onClick={() => handleOAuth("/oauth/github")}
-                        className="flex items-center justify-center gap-3 w-full border border-gray-200 rounded-lg py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                        disabled={!legalAccepted || loading}
+                        className="flex items-center justify-center gap-3 w-full border border-gray-200 rounded-lg py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         {/* GitHub SVG Icon */}
                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -175,8 +217,8 @@ const Register = () => {
 
                     <button
                         type="submit"
-                        disabled={loading}
-                        className="bg-blue-600 text-white rounded-lg py-2.5 text-sm font-semibold hover:bg-blue-700 disabled: opacity-50 transitions-colors mt-2"
+                        disabled={loading || !legalAccepted}
+                        className="bg-blue-600 text-white rounded-lg py-2.5 text-sm font-semibold hover:bg-blue-700 disabled:opacity-50 transition-colors mt-2"
                     >
                         {loading ? "Creating account..." : "Create account"}
                     </button>
