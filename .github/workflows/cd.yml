@@ -1,0 +1,31 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types:
+        - completed
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Staging
+        run: |
+          TARGET_TAG=${{ github.event.workflow_run.head_sha }}
+          echo "Deploying image tag $TARGET_TAG to Staging Environment"
+          # staging deployment script
+
+  deploy-prod:
+    runs-on: ubuntu-latest
+    needs: deploy-staging # Ensures staging is successful before touching prod
+    environment: production # Great for adding manual approval gates in GitHub Settings
+    steps:
+      - name: Deploy to Production
+        run: |
+          TARGET_TAG=${{ github.event.workflow_run.head_sha }}
+          echo "Deploying image tag $TARGET_TAG to Production Environment"
+          # production deployment script
